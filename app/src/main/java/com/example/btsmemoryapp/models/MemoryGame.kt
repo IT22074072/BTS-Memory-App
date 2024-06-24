@@ -3,6 +3,12 @@ package com.example.btsmemoryapp.models
 import com.example.btsmemoryapp.utils.DEFAULT_ICONS
 
 class MemoryGame(private val boardSize: BoardSize){
+    fun flipCard(position: Int) {
+        val card = cards[position]
+        card.isFaceUp = !card.isFaceUp
+
+    }
+
     val cards:List<MemoryCard>
     val numPairsFound = 0
 
