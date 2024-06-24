@@ -1,19 +1,19 @@
 package com.example.btsmemoryapp
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.btsmemoryapp.models.BoardSize
-import com.example.btsmemoryapp.models.MemoryCard
 import com.example.btsmemoryapp.models.MemoryGame
-import com.example.btsmemoryapp.utils.DEFAULT_ICONS
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvBoard:RecyclerView
     private lateinit var tvNumMoves:TextView
     private lateinit var tvNumPairs:TextView
+    private lateinit var clRoot:ConstraintLayout
 
     private lateinit var memoryGame: MemoryGame
 
@@ -35,12 +36,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.clRoot)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        clRoot = findViewById(R.id.clRoot)
         rvBoard = findViewById(R.id.rvBoard)
         tvNumMoves= findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
@@ -63,7 +65,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateGameWithFlip(position: Int) {
-        memoryGame.flipCard(position)
+        //Error handling
+        if(memoryGame.haveWonGame()){
+            //alert the user of an invalid move
+            Snackbar.make(clRoot, "You already won!",Snackbar.LENGTH_LONG).show()
+            return
+
+        }
+        if(memoryGame.isCardFaceUp(position)){
+            //alert the user of an invalid move
+            Snackbar.make(clRoot, "Invalid move!",Snackbar.LENGTH_LONG).show()
+            return
+        }
+
+        //Actually flip over the card
+        if(memoryGame.flipCard(position)){
+            Log.i(TAG, "Found a match! Number of pairs found: ${memoryGame.numPairsFound}")
+        }
         adapter.notifyDataSetChanged()
 
     }
