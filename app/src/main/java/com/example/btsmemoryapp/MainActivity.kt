@@ -74,14 +74,19 @@ class MainActivity : AppCompatActivity() {
         }
         if(memoryGame.isCardFaceUp(position)){
             //alert the user of an invalid move
-            Snackbar.make(clRoot, "Invalid move!",Snackbar.LENGTH_LONG).show()
+            Snackbar.make(clRoot, "Invalid move!",Snackbar.LENGTH_SHORT).show()
             return
         }
 
         //Actually flip over the card
         if(memoryGame.flipCard(position)){
             Log.i(TAG, "Found a match! Number of pairs found: ${memoryGame.numPairsFound}")
+            tvNumPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
+            if (memoryGame.haveWonGame()){
+                Snackbar.make(clRoot, "You won! Congratulations.",Snackbar.LENGTH_LONG).show()
+            }
         }
+        tvNumMoves.text = "Moves: ${memoryGame.getNumMoves()}"
         adapter.notifyDataSetChanged()
 
     }
