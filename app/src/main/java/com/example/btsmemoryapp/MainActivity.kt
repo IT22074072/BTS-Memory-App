@@ -1,5 +1,6 @@
 package com.example.btsmemoryapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -7,10 +8,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.Constraint
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import com.example.btsmemoryapp.models.BoardSize
 import com.example.btsmemoryapp.models.MemoryGame
 import com.google.android.material.snackbar.Snackbar
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
 
 
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
     }
 
+    @SuppressLint("RestrictedApi")
     private fun updateGameWithFlip(position: Int) {
         //Error handling
         if(memoryGame.haveWonGame()){
@@ -82,6 +87,14 @@ class MainActivity : AppCompatActivity() {
         if(memoryGame.flipCard(position)){
             Log.i(TAG, "Found a match! Number of pairs found: ${memoryGame.numPairsFound}")
             tvNumPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
+            val color = ArgbEvaluator().evaluate(
+                memoryGame.numPairsFound.toFloat() / boardSize.getNumPairs(),
+                ContextCompat.getColor(this, R.color.color_progress_none),
+                ContextCompat.getColor(this, R.color.color_progress_full)
+
+            ) as Int
+            tvNumPairs.setTextColor(color)
+
             if (memoryGame.haveWonGame()){
                 Snackbar.make(clRoot, "You won! Congratulations.",Snackbar.LENGTH_LONG).show()
             }
