@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 tvNumPairs.text = "Pairs: 0 / 9"
             }
             BoardSize.HARD -> {
-                tvNumMoves.text = "Easy:6 x 6"
+                tvNumMoves.text = "Easy:6 x 4"
                 tvNumPairs.text = "Pairs: 0 / 12"
             }
         }
