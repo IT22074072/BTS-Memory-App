@@ -30,8 +30,7 @@
         app:layout_constraintBottom_toTopOf="@+id/llGameInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
+         />
 
     <!-- Game Info LinearLayout -->
     <LinearLayout
