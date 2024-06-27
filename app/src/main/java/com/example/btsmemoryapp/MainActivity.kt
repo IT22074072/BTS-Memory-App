@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.content.ContextCompat
@@ -41,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.clRoot)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -68,12 +74,28 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.mi_refresh -> {
                 //setup the game again
-                setupBoard()
+                if (memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()){
+                    showAlertDialog("Quit your current game?", null,View.OnClickListener{
+                        setupBoard()
+                    } )
+                }else{
+                    setupBoard()
+                }
+
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showAlertDialog(title:String, view: View?, positiveClickListener: View.OnClickListener) {
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setView(view)
+            .setNegativeButton("Cancel", null)
+            .setPositiveButton("OK"){_,_->
+                positiveClickListener.onClick(null)
+        }.show()
+    }
 
 
     private fun setupBoard() {
