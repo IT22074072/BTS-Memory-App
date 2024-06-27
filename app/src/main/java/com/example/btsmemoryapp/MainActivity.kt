@@ -99,6 +99,20 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setupBoard() {
+        when (boardSize){
+            BoardSize.EASY -> {
+                tvNumMoves.text = "Easy:4 x 2"
+                tvNumPairs.text = "Pairs: 0 / 4"
+            }
+            BoardSize.MEDIUM -> {
+                tvNumMoves.text = "Easy:6 x 3"
+                tvNumPairs.text = "Pairs: 0 / 9"
+            }
+            BoardSize.HARD -> {
+                tvNumMoves.text = "Easy:6 x 6"
+                tvNumPairs.text = "Pairs: 0 / 12"
+            }
+        }
         tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
 
