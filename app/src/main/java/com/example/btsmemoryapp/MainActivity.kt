@@ -3,6 +3,8 @@ package com.example.btsmemoryapp
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -50,8 +52,31 @@ class MainActivity : AppCompatActivity() {
         tvNumMoves= findViewById(R.id.tvNumMoves)
         tvNumPairs = findViewById(R.id.tvNumPairs)
 
+        setupBoard()
+    }
 
 
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.mi_refresh -> {
+                //setup the game again
+                setupBoard()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+
+    private fun setupBoard() {
         tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize)
 
@@ -67,7 +92,6 @@ class MainActivity : AppCompatActivity() {
         rvBoard.setHasFixedSize(true)
         rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
     }
-
     @SuppressLint("RestrictedApi")
     private fun updateGameWithFlip(position: Int) {
         //Error handling
